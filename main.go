@@ -33,6 +33,7 @@ func (ll *LinkedList[T]) insertPos(pos int, node *Node[T]) {
 		if tmpPos == pos {
 			node.Next = tmp.Next
 			tmp.Next = node
+			return
 		}
 		tmp = tmp.Next
 	}
@@ -55,18 +56,47 @@ func (ll *LinkedList[T]) push(node *Node[T]) {
 }
 
 // Remove the first node
-func shift() {
+func (ll *LinkedList[T]) shift() {
+	if ll.Head == nil {
+		log.Fatalln("Failed to remove the first node")
+	}
 
+	ll.Head = ll.Head.Next
 }
 
 // Remove node with position
-func removePos() {
+func (ll *LinkedList[T]) removePos(pos int) {
+	if ll.Head == nil {
+		log.Fatalln("Failed to remove the first node")
+	}
 
+	var tmp = ll.Head
+	var tmpPos = 0
+	var preNode *Node[T]
+	for tmp.Next != nil {
+		preNode = tmp
+		tmpPos++
+		if tmpPos == pos {
+			preNode.Next = tmp.Next.Next
+			return
+		}
+
+		tmp = tmp.Next
+	}
 }
 
 // Remove the last node
-func pop() {
+func (ll *LinkedList[T]) pop() {
 
+}
+
+func (ll *LinkedList[T]) traverse() {
+	fmt.Println("======================")
+	var curr = ll.Head // pointer variable => & to get value of pointer and * to get value of deference variable
+	for curr != nil {
+		fmt.Println("data", (*curr).Data)
+		curr = (*curr).Next
+	}
 }
 
 func main() {
@@ -91,16 +121,17 @@ func main() {
 	}
 
 	var ll = &LinkedList[string]{}
+
+	// head is the pointer to point the first node in Linked List
 	ll.Head = newNode2
+
 	ll.unshift(newNode)
 	ll.push(newNode3)
 	ll.insertPos(1, newNode4)
+	ll.traverse()
 
-	var curr = ll.Head // pointer variable => & to get value of pointer and * to get value of deference variable
-	for curr != nil {
-		fmt.Println("data", (*curr).Data)
-		curr = (*curr).Next
-	}
+	ll.shift()
+	ll.removePos(2)
+	ll.traverse()
 
-	// fmt.Println(ll)
 }
